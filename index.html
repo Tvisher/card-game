@@ -59,8 +59,9 @@
 
     <script>
         const gameDataRes = {
-            'saveDesctopProportions': true,
-            'arrowType': 'black', //white //black
+            "aspectRatio": '4-3',
+            'desktopColumnSave': false,
+            'arrowType': 'black',
             "cardImages": [
                 "https://swiperjs.com/demos/images/nature-5.jpg",
                 "https://swiperjs.com/demos/images/nature-6.jpg",
@@ -97,12 +98,13 @@
             'resultMessage': 'Какое то сообщение при успешной сборке игры',
         };
         const gridGameApp = new CardsGame({
+            parentElement: "#grid-game",
             gameData: gameDataRes,
-            parentElement: "#grid-game"
         });
         document.addEventListener("DOMContentLoaded", function () {
             gridGameApp.init()
         });
+
     </script>
 </body>
 

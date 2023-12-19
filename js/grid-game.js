@@ -1,6 +1,7 @@
 class CardsGame {
     constructor(data) {
-        this.saveDesctopProportions = data.gameData.saveDesctopProportions;
+        this.aspectRatio = data.gameData.aspectRatio;
+        this.desktopColumnSave = data.gameData.desktopColumnSave;
         this.cardImages = data.gameData.cardImages;
         this.cardsText = data.gameData.cardsText;
         this.cardsCount = this.cardImages.length;
@@ -26,9 +27,9 @@ class CardsGame {
 
     createCardsParent() {
         this.parentElement.innerHTML = '';
-        this.gridPlace.classList.add('grid-game-container', 'pointer-none');
+        this.gridPlace.classList.add('grid-game-container', 'pointer-none', `ratio-${this.aspectRatio}`);
         this.parentElement.appendChild(this.gridPlace);
-        if (this.saveDesctopProportions) {
+        if (this.desktopColumnSave) {
             this.parentElement.classList.add('save-proportions')
         }
         this.createModalPrompt();
@@ -72,6 +73,7 @@ class CardsGame {
             for (let index = 0; index < this.cardsCount; index++) {
                 const card = document.createElement("div");
                 const cardInner = document.createElement("div");
+                const cardInnerWrapper = document.createElement("div");
                 const cardText = this.cardsText[index];
                 if (cardText && cardText.trim().length > 0) {
                     const cardNameplate = document.createElement("div");
@@ -79,9 +81,11 @@ class CardsGame {
                     cardNameplate.classList.add("game-grid-item__prompt");
                     cardInner.append(cardNameplate);
                 }
+                cardInnerWrapper.classList.add("game-grid-item__inner-wrapper");
                 cardInner.classList.add("game-grid-item__inner");
                 cardInner.style.backgroundImage = `url(${this.cardImages[index]})`;
-                card.append(cardInner);
+                cardInnerWrapper.append(cardInner);
+                card.append(cardInnerWrapper);
                 card.classList.add("game-grid-item", this.arrowType);
                 card.setAttribute("data-card-num", index + 1);
                 if (index === this.cardsCount - 1) card.setAttribute("data-last-card", '');
@@ -94,7 +98,7 @@ class CardsGame {
 
     getElementsPosition() {
         let columnCount
-        if (this.saveDesctopProportions) {
+        if (this.desktopColumnSave) {
             columnCount = 3;
         } else {
             columnCount = window.innerWidth > 576 ? 3 : 2;
@@ -158,18 +162,15 @@ class CardsGame {
             return;
         }
 
-
-        if (target.closest('[data-last-card]') && window.innerWidth < 567 && this.cardsArr.length % 2 !== 0 && !this.saveDesctopProportions) {
+        if (target.closest('[data-last-card]') && window.innerWidth <= 576 && this.cardsArr.length % 2 !== 0 && !this.desktopColumnSave) {
             return
         }
 
         if (target.closest('.game-grid-item')) {
-
             if (target.closest('.game-grid-item.big')) {
                 target.closest('.game-grid-item.big').classList.remove('big');
                 return;
             }
-
             const clickedCard = target.closest('.game-grid-item');
             const selectedCard = this.gridPlace.querySelector('.game-grid-item.big');
             selectedCardPos.y = clickedCard.style.top;
@@ -226,12 +227,13 @@ class CardsGame {
         this.cardsGenerate()
             .then(() => {
                 this.getElementsPosition();
+                this.getElementsPosition();
                 setTimeout(() => {
-                    // this.cardsRandomPosition();
+                    this.cardsRandomPosition();
                     this.getElementsPosition();
                     setTimeout(() => {
                         this.gridPlace.classList.remove('pointer-none');
-                        // this.cardsRandomPosition();
+                        this.cardsRandomPosition();
                         this.getElementsPosition();
                     }, 600);
                 }, 1200);
