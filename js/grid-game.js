@@ -103,8 +103,7 @@ class CardsGame {
         } else {
             columnCount = window.innerWidth > 576 ? 3 : 2;
         }
-        const parentHeight = Math.ceil(this.cardsArr.length / columnCount) * this.cardsArr[0].offsetHeight;
-        this.gridPlace.style.height = `${parentHeight + 30}px`;
+
 
         if (columnCount === 2 && this.cardsArr.length % 2 !== 0) {
             const lastCard = this.cardsArr.find(item => item.hasAttribute('data-last-card'));
@@ -117,13 +116,14 @@ class CardsGame {
 
         this.cardsArr.forEach((item, index) => {
             const itemWidth = (this.gridPlace.clientWidth / columnCount) - (30 / columnCount);
-            const itemHeight = item.offsetHeight;
             const column = index % columnCount; // определяем номер колонки (от 1 до 3)
             const row = Math.floor(index / columnCount);// определяем номер строки
             item.style.width = `${itemWidth}px`;
             item.style.left = `${(itemWidth * column) + 15}px`;
-            item.style.top = `${(itemHeight * row) + 15}px`;
+            item.style.top = `${(item.offsetHeight * row) + 15}px`;
         });
+        const parentHeight = Math.ceil(this.cardsArr.length / columnCount) * this.cardsArr[0].offsetHeight;
+        this.gridPlace.style.height = `${parentHeight + 30}px`;
 
     }
 
@@ -217,7 +217,9 @@ class CardsGame {
     }
 
     addEventListeners() {
-        window.addEventListener('resize', this.windowListener, false);
+        window.addEventListener('resize', (e) => {
+            this.windowListener()
+        }, false);
         window.addEventListener('pointerup', this.clickListener, false);
     }
 
