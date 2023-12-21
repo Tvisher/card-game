@@ -7,7 +7,7 @@ class CardsGame {
         this.cardsCount = this.cardImages.length;
         this.arrowType = data.gameData.arrowType;
         this.resultMessage = data.gameData.resultMessage;
-        this.parentElement = document.querySelector(data.parentElement);
+        this.parentElement = typeof data.parentElement == 'string' ? document.querySelector(data.parentElement) : data.parentElement;
         this.gridPlace = document.createElement('div');
         this.modalPrompt = document.createElement('div');
         this.modalResult = document.createElement('div');
