@@ -277,9 +277,16 @@ class CardsGame {
     }
 
     addEventListeners() {
-        window.addEventListener('resize', (e) => {
-            this.windowListener()
-        }, false);
+        let resizeTimeout;
+        const observer = new ResizeObserver(entry => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const newWidth = entry[0].contentRect.width; // Ширина блока
+                console.log('Ширина блока изменилась:', newWidth);
+                this.windowListener()
+            }, 100);
+        });
+        observer.observe(this.parentElement);
         this.parentElement.addEventListener('pointerup', this.clickListener, false);
     }
 
@@ -289,7 +296,7 @@ class CardsGame {
         this.cardsGenerate()
             .then(() => {
                 this.getElementsPosition();
-                this.getElementsPosition();
+                // this.getElementsPosition();
                 setTimeout(() => {
                     this.cardsRandomPosition();
                     this.getElementsPosition();
@@ -305,7 +312,7 @@ class CardsGame {
     destroy() {
         this.parentElement.innerHTML = '';
         this.cardsArr = [];
-        window.removeEventListener('resize', this.windowListener, false);
+        // window.removeEventListener('resize', this.windowListener, false);
         this.parentElement.removeEventListener('pointerdown', this.clickListener, false);
     }
 }
