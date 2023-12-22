@@ -56,55 +56,44 @@
         </a>
     </div>
     <script src="./js/grid-game.js"></script>
-
     <script>
-        const gameDataRes = {
-            "aspectRatio": '1-1',
-            'desktopColumnSave': true,
-            'arrowType': 'black',
-            "cardImages": [
-                "https://swiperjs.com/demos/images/nature-5.jpg",
-                "https://swiperjs.com/demos/images/nature-6.jpg",
-                "https://swiperjs.com/demos/images/nature-7.jpg",
-
-                "https://swiperjs.com/demos/images/nature-5.jpg",
-                "https://swiperjs.com/demos/images/nature-6.jpg",
-                "https://swiperjs.com/demos/images/nature-7.jpg",
-
-                "https://swiperjs.com/demos/images/nature-5.jpg",
-                "https://swiperjs.com/demos/images/nature-6.jpg",
-                "https://swiperjs.com/demos/images/nature-7.jpg",
-
-                // "https://swiperjs.com/demos/images/nature-5.jpg",
-                // "https://swiperjs.com/demos/images/nature-6.jpg",
-                // "https://swiperjs.com/demos/images/nature-7.jpg",
-
-                // "https://swiperjs.com/demos/images/nature-5.jpg",
-                // "https://swiperjs.com/demos/images/nature-6.jpg",
-                // "https://swiperjs.com/demos/images/nature-7.jpg",
-            ],
-            'cardsText': [
-                'Подсказка для 1 карточки',
-                'Подсказка для 2 карточки',
-                'Подсказка для 3 карточки',
-                'Подсказка для 4 карточки',
-                'Подсказка для 5 карточки',
-                'Подсказка для 6 карточки',
-                'Подсказка для 7 карточки',
-                'Подсказка для 8 карточки',
-                'Подсказка для 9 карточки',
-
-            ],
-            'resultMessage': 'Какое то сообщение при успешной сборке игры',
-        };
-        const gridGameApp = new CardsGame({
-            parentElement: "#grid-game",
-            gameData: gameDataRes,
-        });
         document.addEventListener("DOMContentLoaded", function () {
-            gridGameApp.init()
-        });
+            const gameDataRes = {
+                "aspectRatio": '4-3',
+                'desktopColumnSave': false,
+                'arrowType': 'black',
+                "cardImages": [
+                    "https://swiperjs.com/demos/images/nature-5.jpg",
+                    "https://swiperjs.com/demos/images/nature-6.jpg",
+                    "https://swiperjs.com/demos/images/nature-7.jpg",
 
+                    "https://swiperjs.com/demos/images/nature-5.jpg",
+                    "https://swiperjs.com/demos/images/nature-6.jpg",
+                    "https://swiperjs.com/demos/images/nature-7.jpg",
+
+                    "https://swiperjs.com/demos/images/nature-5.jpg",
+                    "https://swiperjs.com/demos/images/nature-6.jpg",
+                    "https://swiperjs.com/demos/images/nature-7.jpg",
+                ],
+                'cardsText': [
+                    'Подсказка для 1 карточки',
+                    'Подсказка для 2 карточки',
+                    'Подсказка для 3 карточки',
+                    'Подсказка для 4 карточки',
+                    'Подсказка для 5 карточки',
+                    'Подсказка для 6 карточки',
+                    'Подсказка для 7 карточки',
+                    'Подсказка для 8 карточки',
+                    'Подсказка для 9 карточки',
+
+                ],
+                'resultMessage': 'Какое то сообщение при успешной сборке игры',
+            };
+            const gridGameApp = new CardsGame({
+                parentElement: "#grid-game",
+                gameData: gameDataRes,
+            });
+        });
     </script>
 </body>
 

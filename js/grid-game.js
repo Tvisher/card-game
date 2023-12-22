@@ -16,6 +16,7 @@ class CardsGame {
         this.windowListener = this.getElementsPosition.bind(this);
         this.clickListener = this.clickLoader.bind(this);
         this.addEventListeners();
+        this.init();
     }
     shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -36,19 +37,38 @@ class CardsGame {
         this.createModalResult()
     }
 
+    // createModalPrompt() {
+    //     this.modalPrompt.classList.add('modal-prompt');
+    //     const modalContent = document.createElement('div');
+    //     modalContent.classList.add('modal-prompt__content');
+    //     const modalClose = document.createElement('div');
+    //     modalClose.classList.add('modal-prompt__close');
+    //     const modalText = document.createElement('div');
+    //     modalText.classList.add('modal-prompt__text');
+    //     modalContent.append(modalClose);
+    //     modalContent.append(modalText);
+    //     this.modalPrompt.append(modalContent);
+    //     this.parentElement.append(this.modalPrompt);
+    // }
+
     createModalPrompt() {
-        this.modalPrompt.classList.add('modal-prompt');
         const modalContent = document.createElement('div');
         modalContent.classList.add('modal-prompt__content');
+
         const modalClose = document.createElement('div');
         modalClose.classList.add('modal-prompt__close');
+
         const modalText = document.createElement('div');
         modalText.classList.add('modal-prompt__text');
-        modalContent.append(modalClose);
-        modalContent.append(modalText);
-        this.modalPrompt.append(modalContent);
-        this.parentElement.append(this.modalPrompt);
+
+        modalContent.appendChild(modalClose);
+        modalContent.appendChild(modalText);
+
+        this.modalPrompt.classList.add('modal-prompt');
+        this.modalPrompt.appendChild(modalContent);
+        this.parentElement.appendChild(this.modalPrompt);
     }
+
 
     createModalResult() {
         this.modalResult.classList.add('modal-result');
@@ -64,16 +84,53 @@ class CardsGame {
         this.parentElement.append(this.modalResult);
     }
 
+    // cardsGenerate() {
+    //     return new Promise((res, rej) => {
+    //         this.gridPlace.innerHTML = '';
+    //         this.gridPlace.setAttribute('data-cards-cound', this.cardsCount);
+    //         this.gridPlace.classList.remove('segments', 'normal', 'loaded');
+    //         this.cardsCount % 2 !== 0 ? this.gridPlace.classList.add('segments') : this.gridPlace.classList.add('normal');
+    //         for (let index = 0; index < this.cardsCount; index++) {
+    //             const card = document.createElement("div");
+    //             const cardInner = document.createElement("div");
+    //             const cardInnerWrapper = document.createElement("div");
+    //             const cardText = this.cardsText[index];
+    //             if (cardText && cardText.trim().length > 0) {
+    //                 const cardNameplate = document.createElement("div");
+    //                 cardNameplate.setAttribute('data-prompt', cardText);
+    //                 cardNameplate.classList.add("game-grid-item__prompt");
+    //                 cardInner.append(cardNameplate);
+    //             }
+    //             cardInnerWrapper.classList.add("game-grid-item__inner-wrapper");
+    //             cardInner.classList.add("game-grid-item__inner");
+    //             cardInner.style.backgroundImage = `url(${this.cardImages[index]})`;
+    //             cardInnerWrapper.append(cardInner);
+    //             card.append(cardInnerWrapper);
+    //             card.classList.add("game-grid-item", this.arrowType);
+    //             card.setAttribute("data-card-num", index + 1);
+    //             if (index === this.cardsCount - 1) card.setAttribute("data-last-card", '');
+    //             this.cardsArr.push(card);
+    //         }
+    //         this.gridPlace.append(...this.cardsArr);
+    //         res();
+    //     })
+    // }
+
+
     cardsGenerate() {
-        return new Promise((res, rej) => {
+        return new Promise((resolve, reject) => {
             this.gridPlace.innerHTML = '';
             this.gridPlace.setAttribute('data-cards-cound', this.cardsCount);
             this.gridPlace.classList.remove('segments', 'normal', 'loaded');
-            this.cardsCount % 2 !== 0 ? this.gridPlace.classList.add('segments') : this.gridPlace.classList.add('normal');
+            this.gridPlace.classList.add(this.cardsCount % 2 !== 0 ? 'segments' : 'normal');
+
+            const fragment = document.createDocumentFragment();
+
             for (let index = 0; index < this.cardsCount; index++) {
                 const card = document.createElement("div");
                 const cardInner = document.createElement("div");
                 const cardInnerWrapper = document.createElement("div");
+
                 const cardText = this.cardsText[index];
                 if (cardText && cardText.trim().length > 0) {
                     const cardNameplate = document.createElement("div");
@@ -81,6 +138,7 @@ class CardsGame {
                     cardNameplate.classList.add("game-grid-item__prompt");
                     cardInner.append(cardNameplate);
                 }
+
                 cardInnerWrapper.classList.add("game-grid-item__inner-wrapper");
                 cardInner.classList.add("game-grid-item__inner");
                 cardInner.style.backgroundImage = `url(${this.cardImages[index]})`;
@@ -89,11 +147,15 @@ class CardsGame {
                 card.classList.add("game-grid-item", this.arrowType);
                 card.setAttribute("data-card-num", index + 1);
                 if (index === this.cardsCount - 1) card.setAttribute("data-last-card", '');
+
+                fragment.appendChild(card);
                 this.cardsArr.push(card);
             }
-            this.gridPlace.append(...this.cardsArr);
-            res();
-        })
+
+            this.gridPlace.appendChild(fragment);
+
+            resolve();
+        });
     }
 
     getElementsPosition() {
@@ -104,7 +166,6 @@ class CardsGame {
             columnCount = window.innerWidth > 576 ? 3 : 2;
         }
 
-
         if (columnCount === 2 && this.cardsArr.length % 2 !== 0) {
             const lastCard = this.cardsArr.find(item => item.hasAttribute('data-last-card'));
             const lastCardIndex = this.cardsArr.findIndex(item => item.hasAttribute('data-last-card'));
@@ -113,7 +174,6 @@ class CardsGame {
                 this.cardsArr.push(lastCard);
             }
         }
-
         this.cardsArr.forEach((item, index) => {
             const itemWidth = (this.gridPlace.clientWidth / columnCount) - (30 / columnCount);
             const column = index % columnCount; // определяем номер колонки (от 1 до 3)
@@ -124,8 +184,8 @@ class CardsGame {
         });
         const parentHeight = Math.ceil(this.cardsArr.length / columnCount) * this.cardsArr[0].offsetHeight;
         this.gridPlace.style.height = `${parentHeight + 30}px`;
-
     }
+
 
     cardsRandomPosition() {
         this.cardsArr = this.shuffleArray(this.cardsArr);
@@ -220,7 +280,7 @@ class CardsGame {
         window.addEventListener('resize', (e) => {
             this.windowListener()
         }, false);
-        window.addEventListener('pointerup', this.clickListener, false);
+        this.parentElement.addEventListener('pointerup', this.clickListener, false);
     }
 
     init() {
@@ -246,6 +306,6 @@ class CardsGame {
         this.parentElement.innerHTML = '';
         this.cardsArr = [];
         window.removeEventListener('resize', this.windowListener, false);
-        window.removeEventListener('pointerdown', this.clickListener, false);
+        this.parentElement.removeEventListener('pointerdown', this.clickListener, false);
     }
 }
