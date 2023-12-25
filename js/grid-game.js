@@ -13,7 +13,7 @@ class CardsGame {
         this.modalResult = document.createElement('div');
         this.cardsArr = [];
         this.correctOrder = this.cardImages.map((item, index) => String(index + 1)).join('');
-        this.windowListener = this.getElementsPosition.bind(this);
+        // this.windowListener = this.getElementsPosition.bind(this);
         this.clickListener = this.clickLoader.bind(this);
         this.addEventListeners();
         this.init();
@@ -277,15 +277,30 @@ class CardsGame {
     }
 
     addEventListeners() {
+        // let resizeTimeout;
+        // const observer = new ResizeObserver(entry => {
+        //     clearTimeout(resizeTimeout);
+        //     resizeTimeout = setTimeout(() => {
+        //         const newWidth = entry[0].contentRect.width; // Ширина блока
+        //         console.log('Ширина блока изменилась:', newWidth);
+        //         this.windowListener()
+        //     }, 100);
+        // });
+        // observer.observe(this.parentElement);
         let resizeTimeout;
-        const observer = new ResizeObserver(entry => {
+        let prevWidth = this.parentElement.clientWidth; // Сохраняем предыдущую ширину
+        const observer = new ResizeObserver(entries => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
-                const newWidth = entry[0].contentRect.width; // Ширина блока
-                console.log('Ширина блока изменилась:', newWidth);
-                this.windowListener()
+                const newWidth = entries[0].contentRect.width; // Ширина блока
+                if (prevWidth !== newWidth) { // Проверяем, изменилась ли ширина
+                    console.log('Ширина блока изменилась:', newWidth);
+                    this.getElementsPosition();
+                    prevWidth = newWidth; // Обновляем предыдущую ширину
+                }
             }, 100);
         });
+
         observer.observe(this.parentElement);
         this.parentElement.addEventListener('pointerup', this.clickListener, false);
     }
